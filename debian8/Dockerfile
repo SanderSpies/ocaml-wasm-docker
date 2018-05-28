@@ -26,7 +26,7 @@ RUN wget "https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-li
     unzip ninja-linux.zip -d /usr/local/bin && \
     rm ninja-linux.zip
 # Import public key required for verifying signature of cmake download.
-RUN gpg --keyserver hkp://pgp.mit.edu --recv 0x2D2CEF1034921684
+RUN gpg --keyserver hkp://pgp.mit.edu:80 --recv 0x2D2CEF1034921684
 # Download, verify and install cmake version that can compile clang into /usr/local.
 # (Version in debian8 repos is is too old)
 RUN mkdir /tmp/cmake-install && cd /tmp/cmake-install && \
