@@ -2,6 +2,7 @@ clean:
 	rm -rf workspace/*
 
 clone:
+	mkdir workspace
 	mkdir workspace/llvmwasm
 	mkdir workspace/llvmwasm/llvm-build
 	git clone https://github.com/sanderspies/llvm workspace/llvmwasm/llvm
@@ -26,6 +27,8 @@ build-ocaml:
 	docker exec -e LLVM_HOME=/workspace/llvmwasm/llvm-build -w /workspace/ocaml ocaml-wasm-bash make coldstart
 	docker exec -e LLVM_HOME=/workspace/llvmwasm/llvm-build -w /workspace/ocaml ocaml-wasm-bash make wasm32
 
+build-wabt:
+	docker exec -e LLVM_HOME=/workspace/llvmwasm/llvm-build -w /workspace/wabt ocaml-wasm-bash make
 
 wasm32:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make wasm32
@@ -36,4 +39,5 @@ full:
 	make build-image
 	make run-container
 	make build-llvm
+	make build-wabt
 	make build-ocaml

@@ -1,12 +1,34 @@
+OCaml wasm in a separate docker container
+===
+Intended for development on OCaml wasm. 
+
+Uses: 
+- llvm
+- wabt
+- OCaml wasm
+
+To be able to edit the projects locally, a volume is used which maps 
+to `workspace`. 
+
 First time:
-- make full
+- `make full` 
+
+Warning: might take some time.
+
+Editing:
+- open the correct folder inside `workspace` in your editor, once done choose one of the following build commands
 
 Build OCaml:
-- make build-ocaml
+- `make build-ocaml`
+
+Build OCaml:
+- `make wasm32`
+
+For incremental development.
 
 Build LLVM:
-- make build-llvm
+- `make build-llvm`
 
+Build wabt:
+- `make build-wabt`
 
-
-`make full` clones the used repositories in the `workspace` folder and are used by docker. You can change the sources here and run `make build-ocaml` to build OCaml wasm in docker.
