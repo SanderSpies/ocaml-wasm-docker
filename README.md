@@ -2,6 +2,8 @@ OCaml wasm in a separate docker container
 ===
 Intended for development on OCaml wasm. 
 
+! Be sure to adjust the absolute path in the Makefile.
+
 Uses: 
 - llvm
 - wabt
