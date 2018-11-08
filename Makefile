@@ -9,6 +9,7 @@ clone:
 	# cd ./workspace/llvmwasm/llvm/tools && git clone https://github.com/sanderspies/lld lld
 	# git clone --recursive https://github.com/sanderspies/wabt workspace/wabt
 	git clone https://github.com/SanderSpies/ocaml workspace/ocaml
+	# cp -R ../ocaml-wasm/ workspace/ocaml
 
 
 build-image:
@@ -23,12 +24,13 @@ run-container:
 
 build-ocaml:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash git checkout before_gc
+	docker exec -w /workspace/ocaml ocaml-wasm-bash make clean
 	docker exec -w /workspace/ocaml ocaml-wasm-bash ./configure -no-pthread -no-debugger -no-curses -no-ocamldoc -no-graph -target-wasm32
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make coldstart
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make wasm32
 
-build-wabt:
-	docker exec -e LLVM_HOME=/workspace/llvmwasm/llvm-build -w /workspace/wabt ocaml-wasm-bash make
+# build-wabt:
+# 	docker exec -e LLVM_HOME=/workspace/llvmwasm/llvm-build -w /workspace/wabt ocaml-wasm-bash make
 
 wasm32:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make wasm32
