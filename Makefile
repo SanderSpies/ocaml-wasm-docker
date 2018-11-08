@@ -24,7 +24,6 @@ run-container:
 
 build-ocaml:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash git checkout before_gc
-	docker exec -w /workspace/ocaml ocaml-wasm-bash make clean
 	docker exec -w /workspace/ocaml ocaml-wasm-bash ./configure -no-pthread -no-debugger -no-curses -no-ocamldoc -no-graph -target-wasm32
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make coldstart
 	docker exec -w /workspace/ocaml ocaml-wasm-bash make wasm32
