@@ -9,7 +9,7 @@ RUN apt-get install -y git
 RUN apt-get install -y make
 RUN apt-get install -y clang
 RUN apt-get install -y lld-7
-# RUN apt-get install -y cmake
+RUN apt-get install -y cmake
 
 ENV PATH $PATH:/usr/lib/llvm-7/bin
 ENV LLVM_HOME /usr/lib/llvm-7
