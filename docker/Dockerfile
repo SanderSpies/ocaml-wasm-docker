@@ -1,31 +1,30 @@
-FROM ubuntu:18.10
+FROM ubuntu:18.04
 
-# RUN apt-get update
-# RUN apt-get install -y wget
-# RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-# RUN apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-7 main"
 RUN apt-get update
 RUN apt-get install -y git
 RUN apt-get install -y make
-RUN apt-get install -y clang
-RUN apt-get install -y lld-7
 RUN apt-get install -y cmake
+RUN apt-get install -y clang
+RUN apt-get install -y rsync
 
-ENV PATH $PATH:/usr/lib/llvm-7/bin
-ENV LLVM_HOME /usr/lib/llvm-7
-VOLUME /workspace
+WORKDIR /llvmwasm
+RUN git clone https://github.com/sanderspies/llvm
 
-# WORKDIR /workspace/llvmwasm/llvm-build
-# RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DLLVM_TARGETS_TO_BUILD= -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly /workspace/llvmwasm/llvm 
-# RUN make -j 6
+WORKDIR /llvmwasm/llvm/tools
+RUN git clone https://github.com/sanderspies/lld
 
-# WORKDIR /workspace/wabt
-# RUN make
+WORKDIR /llvmwasm/llvm-build
+RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DLLVM_TARGETS_TO_BUILD=WebAssembly -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PIC=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly /llvmwasm/llvm 
+RUN make lld
+RUN make -j 4
 
-# WORKDIR /workspace/ocaml
-# ENV LLVM_HOME /workspace/llvmwasm/llvm-build
-# RUN git checkout before_gc
-# RUN ./configure -no-pthread -no-debugger -no-curses -no-ocamldoc -no-graph -target-wasm32
-# RUN make coldstart	
-# RUN ../wabt/bin/wasm2wat --help
-# RUN make wasm32
+WORKDIR /
+RUN git clone --recursive https://github.com/sanderspies/wabt
+RUN ls -l
+RUN git clone https://github.com/SanderSpies/ocaml
+
+WORKDIR /wabt
+RUN make
+
+WORKDIR /ocaml
+ENV LLVM_HOME /llvmwasm/llvm-build
