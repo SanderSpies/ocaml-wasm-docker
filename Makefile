@@ -13,16 +13,16 @@ build-image:
 	cd docker && docker build --no-cache . -t ocaml-wasm-base
 
 run-container-dev:
-	docker run --name ocaml-wasm-bash --rm -dit -v /Users/Sander/Projects/ocaml-wasm-docker-x/workspace:/workspace:z ocaml-wasm-base bash	
+	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash	
 
 run-container:
-	docker run --name ocaml-wasm-bash --rm -dit -v /Users/Sander/Projects/ocaml-wasm-docker-x/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.6 bash
+	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.6 bash
 
 get-image:
 	docker pull sanderspies/ocaml-wasm-test:0.6
 
 copy-sources:
-	mkdir workspace
+	mkdir -p workspace
 	docker exec ocaml-wasm-bash mv /llvmwasm/llvm/tools/lld /workspace
 	docker exec ocaml-wasm-bash mv /llvmwasm/llvm/lib/Object /workspace	
 	docker exec ocaml-wasm-bash ln -sf /workspace/lld /llvmwasm/llvm/tools/lld
