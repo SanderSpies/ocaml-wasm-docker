@@ -33,3 +33,15 @@ Build instructions for docker image:
 - push to dockerhub
 - update the tag in the make file
 - push changes to github
+
+## Issues
+
+If you are using docker-for-mac or docker-for-windows, you'll probably need to increase limit resources available to Docker. 
+You can find these settings at Docker > Preferences > Advanced.
+
+Following setup is working fine. If you need less resources, a quick binary search would help.
+
+- CPUs: 3
+- Memory: 4.0 GiB
+- Swap: 3.5 giB
+
