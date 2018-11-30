@@ -13,7 +13,7 @@ build-image:
 	cd docker && docker build --no-cache . -t ocaml-wasm-base
 
 build-sm:
-	cd docker/spidermonkey && docker build --no-cache . -t ocaml-wasm-spidermonkey
+	cd docker/spidermonkey && docker build . -t ocaml-wasm-spidermonkey
 
 run-sm:
 	docker run --name ocaml-wasm-spidermonkey --rm -it  ocaml-wasm-spidermonkey /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
