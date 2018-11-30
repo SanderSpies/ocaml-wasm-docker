@@ -12,6 +12,12 @@ clone:
 build-image:
 	cd docker && docker build --no-cache . -t ocaml-wasm-base
 
+build-sm:
+	cd docker/spidermonkey && docker build . -t ocaml-wasm-spidermonkey
+
+run-sm:
+	docker run --name ocaml-wasm-spidermonkey --rm -it  ocaml-wasm-spidermonkey /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
+
 run-container-dev:
 	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash	
 
@@ -29,7 +35,7 @@ copy-sources:
 	docker exec ocaml-wasm-bash ln -sf /workspace/Object /llvmwasm/llvm/lib/Object
 	docker exec ocaml-wasm-bash mv /wabt /workspace
 	docker exec ocaml-wasm-bash mv /ocaml /workspace
-	
+
 build-ocaml:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash git checkout before_gc
 	docker exec -w /workspace/ocaml ocaml-wasm-bash ./configure -no-pthread -no-debugger -no-curses -no-ocamldoc -no-graph -target-wasm32 -cc clang
