@@ -22,10 +22,10 @@ run-container-dev:
 	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash	
 
 run-container:
-	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.6 bash
+	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.8 bash
 
 get-image:
-	docker pull sanderspies/ocaml-wasm-test:0.6
+	docker pull sanderspies/ocaml-wasm-test:0.8
 
 copy-sources:
 	mkdir -p workspace
