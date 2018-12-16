@@ -13,13 +13,16 @@ build-image:
 	cd docker && docker build --no-cache . -t ocaml-wasm-base
 
 build-sm:
-	cd docker/spidermonkey && docker build . -t ocaml-wasm-spidermonkey
+	docker build . -f docker/spidermonkey/Dockerfile -t ocaml-wasm-spidermonkey
 
 run-sm:
 	docker run --name ocaml-wasm-spidermonkey --rm -it  ocaml-wasm-spidermonkey /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
 
+run-sm-wabt:
+	docker run --name ocaml-wasm-spidermonkey-container --rm -it -v `pwd`/workspace:/sm-root/workspace:z ocaml-wasm-spidermonkey bash
+
 run-container-dev:
-	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash	
+	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash
 
 run-container:
 	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.8 bash

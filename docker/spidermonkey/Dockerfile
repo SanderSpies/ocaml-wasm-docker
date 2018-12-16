@@ -9,6 +9,7 @@ RUN apt-get install -y autoconf2.13
 RUN apt-get install -y gcc
 RUN apt-get install -y g++
 RUN apt-get install -y clang
+RUN apt-get install -y ocaml
 
 WORKDIR /sm-root
 RUN wget https://hg.mozilla.org/mozilla-central/archive/tip.tar.gz
@@ -29,3 +30,13 @@ WORKDIR /sm-root/sm/js/src/build_OPT.OBJ
 RUN SHELL=$SHELL ../configure
 RUN SHELL=$SHELL make
 RUN make install
+
+WORKDIR /sm-root
+RUN mkdir sm-wabt-wrapper
+WORKDIR /sm-root/sm-wabt-wrapper
+COPY ${PWD}/sm-wabt-wrapper/sm.ml /sm-root/sm-wabt-wrapper/sm.ml
+RUN ocamlopt -o /sm-root/sm-wabt-wrapper/sm-wabt-wrapper unix.cmxa sm.ml
+ENV PATH /sm-root/sm-wabt-wrapper:$PATH
+ENV SM_PATH /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
+
+WORKDIR /sm-root
