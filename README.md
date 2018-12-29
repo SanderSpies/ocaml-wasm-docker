@@ -40,6 +40,12 @@ Build instructions for docker image:
 - `make run-sm-wabt` to run and connect to the container interactively. This will load the bash shell. To log into the spidermonkey shell directly, use `make run-sm`
 - Once attached to the container (ocaml-wasm-spidermonkey-container) `sm-wabt-wrapper` is available to you in the path. Use `sm-wabt-wrapper output.wasm input.wat` to create .wasm files from .wat inside the `workspace` directory
 
+Note: On Linux 4.19, due to a [bug in METACOPY](https://www.spinics.net/lists/linux-unionfs/msg06109.html), docker [has issues building images](https://github.com/docker/for-linux/issues/480), because of which you may encounter `Invalid cross-device link` or `dpkg: error: error creating new backup file '/var/lib/dpkg/status-old': Invalid cross-device link`. Run the following before building the sm image in case you do.
+
+    echo N | sudo tee /sys/module/overlay/parameters/metacopy
+
+
+
 ## Issues
 
 If you are using docker-for-mac or docker-for-windows, you'll probably need to increase limit resources available to Docker. 
