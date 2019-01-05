@@ -14,10 +14,17 @@ RUN apt-get install -y nodejs
 WORKDIR /llvmwasm
 RUN git clone https://github.com/sanderspies/llvm
 
+WORKDIR /llvmwasm/llvm
+RUN git checkout reference-types
+
 WORKDIR /llvmwasm/llvm/tools
 RUN git clone https://github.com/sanderspies/lld
 
+WORKDIR /llvmwasm/llvm/tools/lld
+RUN git checkout reference-types
+
 WORKDIR /llvmwasm/llvm-build
+
 RUN cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$INSTALLDIR -DLLVM_TARGETS_TO_BUILD=WebAssembly -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_BUILD_TOOLS=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_ENABLE_PIC=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly /llvmwasm/llvm 
 RUN make lld
 RUN make -j 4
