@@ -8,9 +8,17 @@ clone:
 	git clone --recursive https://github.com/sanderspies/wabt workspace/wabt
 	git clone https://github.com/SanderSpies/ocaml workspace/ocaml
 
+build-image-manual-gc:
+	cd docker/manual-gc && docker build --no-cache . -t ocaml-wasm-manual-gc
 
-build-image:
-	cd docker && docker build --no-cache . -t ocaml-wasm-base
+build-image-fast-manual-gc:
+	cd docker/manual-gc && docker build . -t ocaml-wasm-manual-gc
+
+build-image-wasm-gc:
+	cd docker/wasm-gc && docker build --no-cache . -t ocaml-wasm-base-gc
+
+build-image-fast-wasm-gc:
+	cd docker/wasm-gc && docker build . -t ocaml-wasm-base-gc
 
 build-sm:
 	cd docker/spidermonkey && docker build . -t ocaml-wasm-spidermonkey
@@ -18,25 +26,36 @@ build-sm:
 run-sm:
 	docker run --name ocaml-wasm-spidermonkey --rm -it  ocaml-wasm-spidermonkey /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
 
-run-container-dev:
-	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z ocaml-wasm-base bash	
+run-container-dev-wasm-gc:
+	docker run --name ocaml-wasm-bash-gc --rm -dit -v `pwd`/workspace-wasmgc:/workspace:z ocaml-wasm-base-gc bash	
 
-run-container:
-	docker run --name ocaml-wasm-bash --rm -dit -v `pwd`/workspace:/workspace:z sanderspies/ocaml-wasm-test:0.10 bash
+run-container-dev-manual-gc:
+	docker run --name ocaml-wasm-manual-gc --rm -dit -v `pwd`/workspace-manualgc:/workspace:z ocaml-wasm-manual-gc bash	
+
+run-container-wasm-gc:
+	docker run --name ocaml-wasm-bash-gc --rm -dit -v `pwd`/workspace-wasmgc:/workspace:z sanderspies/ocaml-wasm-test:0.12 bash
+
+run-container-manual-gc:
+	docker run --name ocaml-wasm-manual-gc --rm -dit -v `pwd`/workspace-manualgc:/workspace:z sanderspies/ocaml-wasm-test:0.12 bash
 
 get-image:
-	docker pull sanderspies/ocaml-wasm-test:0.10
+	docker pull sanderspies/ocaml-wasm-test:0.12
 
-copy-sources:
-	mkdir -p workspace
-	docker exec ocaml-wasm-bash mv /llvmwasm/llvm/tools/lld /workspace
-	docker exec ocaml-wasm-bash mv /llvmwasm/llvm/lib/Object /workspace	
-	docker exec ocaml-wasm-bash mv /llvmwasm/llvm/include /workspace	
-	docker exec ocaml-wasm-bash ln -sf /workspace/lld /llvmwasm/llvm/tools/lld
-	docker exec ocaml-wasm-bash ln -sf /workspace/Object /llvmwasm/llvm/lib/Object
-	docker exec ocaml-wasm-bash ln -sf /workspace/include /llvmwasm/llvm/lib/include
-	docker exec ocaml-wasm-bash mv /wabt /workspace
-	docker exec ocaml-wasm-bash mv /ocaml /workspace
+copy-sources-manual-gc:
+	mkdir -p workspace-manualgc
+	docker exec ocaml-wasm-manual-gc mv /wabt /workspace
+	docker exec ocaml-wasm-manual-gc mv /ocaml /workspace
+
+copy-sources-wasm-gc:
+	mkdir -p workspace-wasmgc
+	docker exec ocaml-wasm-bash-gc mv /llvmwasm/llvm/tools/lld /workspace
+	docker exec ocaml-wasm-bash-gc mv /llvmwasm/llvm/lib/Object /workspace	
+	docker exec ocaml-wasm-bash-gc mv /llvmwasm/llvm/include /workspace	
+	docker exec ocaml-wasm-bash-gc ln -sf /workspace/lld /llvmwasm/llvm/tools/lld
+	docker exec ocaml-wasm-bash-gc ln -sf /workspace/Object /llvmwasm/llvm/lib/Object
+	docker exec ocaml-wasm-bash-gc ln -sf /workspace/include /llvmwasm/llvm/lib/include
+	docker exec ocaml-wasm-bash-gc mv /wabt /workspace
+	docker exec ocaml-wasm-bash-gc mv /ocaml /workspace
 
 build-ocaml:
 	docker exec -w /workspace/ocaml ocaml-wasm-bash git checkout before_gc
