@@ -21,7 +21,7 @@ build-image-fast-wasm-gc:
 	cd docker/wasm-gc && docker build . -t ocaml-wasm-base-gc
 
 build-sm:
-	cd docker/spidermonkey && docker build . -t ocaml-wasm-spidermonkey
+	docker build . -f docker/spidermonkey/Dockerfile -t ocaml-wasm-spidermonkey
 
 run-sm:
 	docker run --name ocaml-wasm-spidermonkey --rm -it  ocaml-wasm-spidermonkey /sm-root/sm/js/src/build_OPT.OBJ/js/src/js
@@ -31,6 +31,9 @@ run-container-dev-wasm-gc:
 
 run-container-dev-manual-gc:
 	docker run --name ocaml-wasm-manual-gc --rm -dit -v `pwd`/workspace-manualgc:/workspace:z ocaml-wasm-manual-gc bash	
+
+run-sm-wabt:
+	docker run --name ocaml-wasm-spidermonkey-container --rm -it -v `pwd`/workspace:/sm-root/workspace:z ocaml-wasm-spidermonkey bash
 
 run-container-wasm-gc:
 	docker run --name ocaml-wasm-bash-gc --rm -dit -v `pwd`/workspace-wasmgc:/workspace:z sanderspies/ocaml-wasm-test:0.12 bash
