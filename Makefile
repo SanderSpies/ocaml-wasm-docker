@@ -48,7 +48,7 @@ copy-sources-manual-gc:
 	mkdir -p workspace-manualgc
 	docker exec ocaml-wasm-manual-gc mv /wabt /workspace
 	docker exec ocaml-wasm-manual-gc mv /ocaml /workspace
-
+	
 copy-sources-wasm-gc:
 	mkdir -p workspace-wasmgc
 	docker exec ocaml-wasm-bash-gc mv /llvmwasm/llvm/tools/lld /workspace

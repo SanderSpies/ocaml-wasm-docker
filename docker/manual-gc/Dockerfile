@@ -13,16 +13,32 @@ RUN apt-get install -y rsync
 # RUN apt-get update
 RUN apt-get install -y nodejs
 
-
 WORKDIR /
 RUN git clone --recursive https://github.com/webassembly/wabt
 RUN git clone https://github.com/SanderSpies/ocaml
+RUN git clone https://github.com/CraneStation/wasi-sysroot
+RUN git clone --recurse-submodules https://github.com/CraneStation/wasmtime.git
+RUN git clone https://github.com/jedisct1/libclang_rt.builtins-wasm32.a
+RUN curl https://sh.rustup.rs -sSf > rustup
+RUN sh rustup -y
+RUN mkdir /usr/lib/llvm-8/lib/clang/8.0.0/lib/wasi
+RUN cp /libclang_rt.builtins-wasm32.a/precompiled/libclang_rt.builtins-wasm32.a /usr/lib/llvm-8/lib/clang/8.0.0/lib/wasi/
+ENV PATH="/usr/lib/llvm-8/bin/:${PATH}"
+
+WORKDIR /wasmtime
+RUN $HOME/.cargo/bin/cargo build --release
 
 WORKDIR /wabt
 RUN make
 
+WORKDIR /wasi-sysroot
+RUN make install INSTALL_DIR=/workspace/wasi
+
 WORKDIR /ocaml
 RUN git checkout manual_gc
+
 ENV LLVM_HOME /usr/lib/llvm-8
 
 WORKDIR /workspace/ocaml
+
+# RUN clang --target=wasm32-unknown-wasi --sysroot /wasi-sysroot/sysroot -Os -s -o example.wasm test.c
