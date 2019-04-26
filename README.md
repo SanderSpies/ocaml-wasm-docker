@@ -1,3 +1,12 @@
+Current steps to get a working manual gc environment:
+- make build-image-fast-manual-gc
+- make run-container-dev-manual-gc
+- make copy-sources-manual-gc
+- docker attach <container id>
+- make wasi
+
+TODO: change the text below:
+
 OCaml wasm in a separate docker container
 ===
 Intended for development on OCaml wasm. 
