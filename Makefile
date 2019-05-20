@@ -30,7 +30,7 @@ run-container-dev-wasm-gc:
 	docker run --name ocaml-wasm-bash-gc --rm -dit -v `pwd`/workspace-wasmgc:/workspace:z ocaml-wasm-base-gc bash	
 
 run-container-dev-manual-gc:
-	docker run --name ocaml-wasm-manual-gc --rm -dit -v `pwd`/workspace-manualgc:/workspace:z ocaml-wasm-manual-gc bash	
+	docker run  --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined  --name ocaml-wasm-manual-gc --rm -dit -v `pwd`/workspace-manualgc:/workspace:z ocaml-wasm-manual-gc bash	
 
 run-sm-wabt:
 	docker run --name ocaml-wasm-spidermonkey-container --rm -it -v `pwd`/workspace:/sm-root/workspace:z ocaml-wasm-spidermonkey bash

@@ -1,0 +1,16 @@
+diff --git wasmtime-debug/src/transform.rs wasmtime-debug/src/transform.rs
+index 114dac3..a527217 100644
+--- wasmtime-debug/src/transform.rs
++++ wasmtime-debug/src/transform.rs
+@@ -568,8 +568,9 @@ where
+     }
+     for (die_id, attr_name, offset) in pending_die_refs {
+         let die = comp_unit.get_mut(die_id);
+-        let unit_id = die_ref_map[&offset];
+-        die.set(attr_name, write::AttributeValue::ThisUnitEntryRef(unit_id));
++        if let Some(unit_id) = die_ref_map.get(&offset) {
++            die.set(attr_name, write::AttributeValue::ThisUnitEntryRef(*unit_id));
++        }
+     }
+     Ok(())
+ }
